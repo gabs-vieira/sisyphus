@@ -1,0 +1,25 @@
+[project]
+name = "sisyphus"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "gabs-vieira", email = "thugsgabriel@gmail.com" }
+]
+requires-python = ">=3.9"
+dependencies = [
+    "httpx>=0.28.1",
+    "selectolax>=0.4.11",
+]
+
+[project.scripts]
+sisyphus = "sisyphus:main"
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+]
