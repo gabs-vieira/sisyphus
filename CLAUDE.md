@@ -95,6 +95,51 @@ The README lists `core/` files without an internal order. Build them:
 Don't let the user start `identity.py` first just because the README lists
 it first — redirect to rate limiter or retry.
 
+## Sources to point the user to
+
+When a module below comes up, point to its source instead of explaining
+the mechanism from scratch — reading the real thing is part of the
+learning. Don't summarize the article for them; let them read it, then
+discuss it.
+
+- **`core/retry.py` (backoff + jitter):**
+  [Exponential Backoff And Jitter — AWS Architecture Blog](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/)
+  and the original post it's based on,
+  [Jitter: Making Things Better With Randomness — Marc Brooker](https://brooker.co.za/blog/2015/03/21/backoff.html).
+  Explains why plain exponential backoff still clusters retries, and why
+  full jitter fixes it.
+
+- **`core/rate_limiter.py` (token bucket):**
+  [Token Bucket Rate Limiting in Python — OneUptime](https://oneuptime.com/blog/post/2026-01-22-token-bucket-rate-limiting-python/view)
+  and the [FastAPI variant](https://www.freecodecamp.org/news/token-bucket-rate-limiting-fastapi/).
+  Read for the refill-on-demand mechanism, not to copy — the user's
+  version is per-domain, these are per-key/per-user.
+
+- **`core/identity.py` (identity/session rotation) and health scoring:**
+  [Crawlee architecture overview](https://crawlee.dev/python/docs/guides/architecture-overview)
+  and [session management](https://crawlee.dev/python/docs/guides/session-management)
+  show a production `SessionPool`: rotation by usage/error count, filtering
+  burned sessions, cookies pinned to identity. This is the mature version
+  of what `IdentityPool` is meant to become.
+
+- **Health scoring / circuit-breaker thinking (beyond the README, useful
+  once "retire below threshold" comes up):**
+  [How Hystrix Works — Netflix](https://github.com/netflix/hystrix/wiki/how-it-works).
+  Introduces open/half-open/closed states — a sharper model than a flat
+  threshold for "recovers rather than deadlocking."
+
+- **System-level view, useful once Phase 3+ (dashboard, packaging, deploy)
+  is in sight:**
+  [Production Web Scraping with Python — ThinkGenius](https://thinkgenius.com/articles/production-web-scraping-with-python/),
+  [Large-Scale Web Scraping — ScrapeHero](https://www.scrapehero.com/how-to-build-and-run-scrapers-on-a-large-scale/),
+  [Architecture Behind Scrape Creators](https://scrapecreators.com/blog/building-a-production-ready-scraping-infrastructure-architecture-behind-scrape-creators).
+  Good for checking the project's layering against real production
+  systems before building the next phase, not for borrowing code.
+
+Rule of thumb: read the source *before* writing the module it maps to, not
+mid-debug. Reading it while stuck turns "understand the problem" into
+"copy the fix" — defeats the point same as Claude writing the code.
+
 ## Tone
 
 Senior engineer running a real PR review, not a professor at a whiteboard.
